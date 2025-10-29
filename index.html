@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xian | Sign Up</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #f5f5f5;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 0 0 30px 30px;
+      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+    }
+
+    .logo {
+      width: 80px; height: 80px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .logo::before {
+      content: '💎💰';
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+    }
+
+    .header h1 { color: white; font-size: 32px; font-weight: 700; margin-bottom: 10px; }
+    .header p { color: rgba(255, 255, 255, 0.95); font-size: 16px; }
+
+    .container { padding: 30px 20px; max-width: 500px; margin: 0 auto; }
+    .form-group { margin-bottom: 25px; }
+    label {
+      display: block; color: #0066ff; font-size: 16px;
+      font-weight: 600; margin-bottom: 8px;
+    }
+
+    .input-wrapper { position: relative; }
+    input[type="email"], input[type="password"] {
+      width: 100%; padding: 15px 50px 15px 15px;
+      border: 2px solid #e0e0e0; border-radius: 12px;
+      font-size: 16px; background-color: #f8f9fa;
+      transition: all 0.3s;
+    }
+    input:focus {
+      outline: none; border-color: #0066ff; background-color: white;
+    }
+    .input-icon {
+      position: absolute; right: 15px; top: 50%;
+      transform: translateY(-50%); color: #0066ff;
+      font-size: 20px; cursor: pointer;
+    }
+
+    .btn-login {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+      color: white; border: none; border-radius: 12px;
+      font-size: 18px; font-weight: 600;
+      cursor: pointer; transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+    }
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 102, 255, 0.4);
+    }
+
+    .register-link {
+      text-align: center; margin-top: 25px; font-size: 15px; color: #666;
+    }
+    .register-link a { color: #0066ff; font-weight: 600; text-decoration: none; }
+    .register-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="logo"></div>
+    <h1>Xian | Pastimurah</h1>
+    <p><strong>Top up game murah tanpa terkena pajak cumang di Xian Pasti murah!</strong></p>
+  </div>
+
+  <div class="container">
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" placeholder="contoh@email.com" required>
+          <span class="input-icon">📧</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Kata Sandi</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" placeholder="Minimal 6 karakter" required>
+          <span class="input-icon" id="togglePwd">👁️</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login">Daftar Sekarang</button>
+
+      <div class="register-link">
+        Sudah punya akun? <a href="login.html">Login</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://fdushhzrlgxjfjwsrysi.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkdXNoaHpybGd4amZqd3NyeXNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2MzU5OTUsImV4cCI6MjA3NzIxMTk5NX0.3hy-qGuHn7Hmvq38JB2QFIqFyByqkCEvf9-mnb9gXDM";
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 👁️ toggle password
+    document.getElementById("togglePwd").addEventListener("click", function() {
+      const pwd = document.getElementById("password");
+      pwd.type = pwd.type === "password" ? "text" : "password";
+      this.textContent = pwd.type === "password" ? "🤓" : "🙈";
+    });
+
+    // 🔐 Sign up Supabase
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const { data, error } = await client.auth.signUp({ email, password });
+        if (error) throw error;
+
+        alert("Pendaftaran berhasil! Silakan login.");
+        window.location.href = "login.html"; // 🔄 pindah ke halaman login
+      } catch (err) {
+        alert("Gagal daftar: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>
